@@ -1,0 +1,13 @@
+sudopython-m pipinstallpymongo
+###Openmongo
+usetest1
+db.createCollection("emp")
+###OpenPython
+from pymongoimportMongoClient
+client=MongoClient("mongodb://127.0.0.1:27017")
+database=client.test1
+collection=database.emp
+collection.insert({"name":"smartphone","quantity":"10","price":"50000"})
+print("inserted")
+client.close()
+##checkoutputinmong

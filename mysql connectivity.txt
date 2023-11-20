@@ -1,0 +1,35 @@
+Ubuntu open command prompt then
+1. pip install mysql-connector
+2
+>sudo mysql -u root -p
+>USE mysql;
+>UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+>FLUSH PRIVILEGES;
+>exit;
+>service mysql restart
+3. then again open mysql
+> create database db3;
+> use db3;
+> create table stud1(name varchar(10), rno int);
+> exit;
+ 4.on root prompt excute follwing pyhon file ( which is saveed in home directory)
+file name is python_conn11.py
+> python python_conn.py
+5. then open mysql 
+> use db3
+> select * from stud1;
+************
+ python_conn11.py    
+ **
+import mysql.connector
+mydb = mysql.connector.connect(
+  host="localhost",
+  user=" root",
+ # password="",
+  database="db3"
+)
+mycursor = mydb.cursor()
+sql = "INSERT INTO stud1 (name, rno) VALUES ('Ram', 22)"
+mycursor.execute(sql)
+mydb.commit()
+print(mycursor.rowcount, "record inserted.")

@@ -1,0 +1,42 @@
+
+1. Display the total salary of per company
+-->db.Employee.aggregate([
+  {
+    $group: {
+      _id: "$CompanyName",
+      totalSalary: { $sum: "$Salary" }
+    }
+  }
+]);
+
+2. Display the total salary of company Name:"TCS"
+-->db.Employee.aggregate([
+  {
+    $match: { CompanyName: "TCS" }
+  },
+  {
+    $group: {
+      _id: "$CompanyName",
+      totalSalary: { $sum: "$Salary" }
+    }
+  }
+]);
+
+3. Return the average salary of company whose address is “Pune".
+-->db.Employee.aggregate([
+  {
+    $match: { "Address.city": "Pune" }
+  },
+  {
+    $group: {
+      _id: "$CompanyName",
+      avgSalary: { $avg: "$Salary" }
+    }
+  }
+]);
+
+4. Display total count for “City=Pune”
+-->db.Employee.count({ "Address.city": "Pune" });
+
+5. Return count for city pune and age greater than 40
+-->db.Employee.count({ "Address.city": "Pune", Age: { $gt: 40 } });

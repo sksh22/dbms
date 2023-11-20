@@ -1,0 +1,27 @@
+create table stud(rollno number,name varchar(20),att int,status varchar(20));
+insert into stud(rollno,name,att) values(1,'sksh',78);
+insert into stud(rollno,name,att) values(2,'skshii',65);
+
+select * from stud;
+
+Declare
+    mroll number(10); 
+    matt number(10);
+
+Begin
+    mroll:= 2;
+    select att into matt from stud where rollno = mroll; 
+    if matt < 75 then
+    dbms_output.put_line(mroll||'Term Not Granted'); 
+    update stud set status='D' 
+    where rollno=mroll;
+    else
+    dbms_output.put_line(mroll||'Term Granted'); 
+    update stud set status='ND' 
+    where rollno=mroll; 
+    end if;
+Exception
+when no_data_found then 
+dbms_output.put_line(mroll||'Not found');
+
+End;

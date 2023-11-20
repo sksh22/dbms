@@ -1,0 +1,16 @@
+create table finalarea(radius int,area float);
+ 
+DECLARE 
+r int;
+area float;
+pi float;
+ 
+BEGIN
+pi:=3.14;
+for r in 5..9
+LOOP
+    area:=pi*r*r;
+    dbms_output.put_line('area:'||area);
+    insert into finalarea values(r,area);
+END LOOP;
+END;

@@ -1,0 +1,49 @@
+/*create table borrower(roll_no int, name varchar(20),date_of_issue date,name_of_book varchar(20),
+status varchar(20));*/
+
+/create table fine(roll_no int, datee date,amt int);/
+
+/INSERT INTO borrower VALUES(45,'siya',TO_DATE('01-08-2022','DD-MM-YYYY'),'HARRY POTTER','PENDING');/
+/INSERT INTO borrower VALUES(46,'sristha',TO_DATE('15-010-2022','DD-MM-YYYY'),'DARK MATTER','PENDING');/
+/INSERT INTO borrower VALUES(48,'amogh',TO_DATE('26-09-2023','DD-MM-YYYY'),'GOD OF WAR','PENDING');/
+/insert into borrower values(49,'advait',TO_DATE('09-10-2023','DD-MM-YYYY'),'SPIDER-MAN','PENDING');/
+
+/select * from borrower;/
+
+DECLARE 
+	i_roll_no NUMBER(10);
+	name_of_book char(25);
+	no_of_days NUMBER;
+	temp NUMBER;
+	doi DATE;
+	finee NUMBER;
+	
+BEGIN
+	i_roll_no := 45;
+	dbms_output.put_line(i_roll_no);
+	name_of_book := 'HARRY POTTER';
+
+	SELECT date_of_issue into doi from borrower where roll_no= i_roll_no;
+	no_of_days := trunc(SYSDATE)-doi;
+
+        IF p_rollno <= 0 THEN 
+        RAISE nodata;
+
+	IF (no_of_days >15 AND no_of_days <=30) THEN
+		finee := 5*no_of_days;
+		
+	ELSIF (no_of_days>30 ) THEN
+		temp := no_of_days-30;
+		finee := 150 + temp*50;
+	END IF;
+	dbms_output.put_line(finee);
+
+	INSERT INTO fine VALUES(i_roll_no,trunc(SYSDATE),finee);
+	UPDATE borrower SET status = 'RETURNED' WHERE borrower.roll_no = i_roll_no;
+        EXCEPTION 
+        WHEN nodata THEN 
+        dbms_output.put_line('!!!!!Roll Number not found!!!!!');
+
+	
+END;
+/

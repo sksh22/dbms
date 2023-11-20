@@ -1,0 +1,67 @@
+create table branch(branch_name varchar(20) primary key, branch_city varchar(20) not null,assets varchar(20) not
+null);
+
+create table account(acc_no int primary key, branch_name varchar(20) not null, balance int not null check(balance>=2000),foreign key (branch_name) references Branch (branch_name) on delete cascade);
+
+create table customer(cust_name varchar(20) primary key,cust_street varchar(20) not null,cust_city varchar(20) not null);
+
+create table depositor(cust_name varchar(20) not null, acc_no int not null, foreign key (cust_name) references customer(cust_name) on delete cascade, foreign key (acc_no ) references account(acc_no) on delete cascade);
+
+create table loan(loan_no int primary key,branch_name varchar(20) not null,amount int not null, foreign key(branch_name) references branch (branch_name) on delete cascade);
+
+create table borrower(cust_name varchar(20) not null, loan_no int not null, foreign key (cust_name) references customer(cust_name) on delete cascade, foreign key (loan_no ) references loan(loan_no) on delete cascade);
+
+######################################################################################
+
+1. Find the names of all branches in loan relation.
+ --> select branch_name from loan;
+
+2. Find all loan numbers for loans made at „Wadia College‟ Branch with loan amount > 12000.
+--> select branch_name,loan_no from loan where branch_name='wadia' and amount>12000;
+
+3. Find all customers who have a loan from bank. Find their names,loan_no and loan amount.
+-->select borrower.cust_name,loan.loan_no,loan.amount from loan, borrower where loan.loan_no= 
+borrower.loan_no
+
+4. List all customers in alphabetical order who have loan from "Wadia College‟ branch.
+-->select borrower.cust_name from borrower,loan where borrower.loan_no=loan.loan_no and loan.branch_name='Akurdi' order by borrower.cust_name asc;
+
+5. Display distinct cities Fof branch.
+--> select distinct branch_city from branch;
+
+############################################################################################
+
+1. Find all customers who have both account and loan at bank.
+-->select depositor.cust_name from depositor, borrower where depositor.cust_name=borrower.cust_name;
+ 
+2. Find all customers who have an account or loan or both at bank.
+-->select cust_name from depositor union select cust_name from borrower;
+
+3. Find all customers who have account but no loan at the bank.
+-->select cust_name from depositer where cust_name not in (select cust_name from borrower);
+
+4. Find average account balance at "Wadia College‟ branch.
+-->select avg(balance), branch_name from account where branch_name="wadia";
+
+5. Find no. of depositors at each branch
+-->select branch_name,count(*) from account group by branch_name;
+
+#############################################################################################
+
+1. Find the branches where average account balance > 15000.
+-->select branch_name, avg(balance) from account group by branch_name having avg(balance)>12000;
+
+2. Find number of tuples in customer relation.
+-->select count(*) from customer;
+
+3. Calculate total loan amount given by bank.
+-->select sum(amount) from loan; 
+
+4. Delete all loans with loan amount between 1300 and 1500.
+-->delete from loan where amount>=1300 and amount<=1500;
+
+5. Find the average account balance at each branch
+-->select branch_name, avg(balance) from account group by branch_name;
+
+6. Find name of Customer and city where customer name starts with Letter P. 
+-->select cust_name , cust_city from customer where cust_name like 's%';

@@ -1,0 +1,63 @@
+ create table cus_master(cust_no varchar(20) primary key,cust_name varchar(20) not null,cust_addr varchar(20) not null);
+
+create table orders(order_no int primary key,cust_no varchar(20) not null,order_date date not null,qty_ordered int not null , foreign key (cust_no) references cus_master (cust_no) on delete cascade);
+
+ create table product(product_no int primary key,product_name varchar(20) not null,order_no int not null,foreign key (order_no) references orders(order_no) on delete cascade);
+
+###########################################################################################
+
+1. List names of customers having 'A' as second letter in their name.
+-->select cust_name from cus_master where cust_name like '_a%';
+
+2. Display order from Customer no C1002,C1005,C1007 and C1008
+-->select * from orders where cust_no in (1002,1007,1005,1008);
+
+3. List Clients who stay in either 'Banglore or 'Manglore'
+--> select * from cus_master where cust_addr in ('banglore','manglore');
+
+4. Display name of customers& the product_name they have purchase
+-->SELECT cus_master.cust_name, product.product_name FROM cus_master JOIN orders ON cus_master.cust_no = orders.cust_no JOIN product ON orders.order_no = product.order_no;
+
+5. Create view View1 consisting of Cust_name, Product_name.
+-->create view view1 as SELECT cus_master.cust_name, product.product_name FROM cus_master JOIN orders ON cus_master.cust_no = orders.cust_no JOIN product ON orders.order_no = product.order_no;
+
+6. Disply product_name and quantity purchase by each customer
+-->select cus_master.cust_name,product.product_name,orders.qty_ordered from cus_master join orders on cus_master.cust_no=orders.cust_no join product on product.order_no=orders.order_no;
+
+7. Perform different joint operation.
+-->INER JOIN  
+SELECT *
+FROM cus_master
+INNER JOIN orders ON cus_master.cust_no = orders.cust_no;
+-->LEFT JOIN 
+SELECT *
+FROM cus_master
+LEFT JOIN orders ON cus_master.cust_no = orders.cust_no;
+-->RIGHT JOIN
+SELECT *
+FROM cus_master
+RIGHT JOIN orders ON cus_master.cust_no = orders.cust_no;
+--> FULL join 
+SELECT *
+FROM orders
+FULL JOIN cus_master ON orders.cust_no= cus_master.cust_no;
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select cus_master.cust_name,product.product_name,orders.qty_ordered from cus_master join orders on cus_master.cust_no=orders.cust_no join product on product.order_no=orders.order_no;

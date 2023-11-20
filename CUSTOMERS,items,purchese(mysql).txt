@@ -1,0 +1,35 @@
+CUSTOMERS(CNo, Cname, Ccity, CMobile)
+ITEMS(INo, Iname, Itype, Iprice, Icount)
+PURCHASE(PNo, Pdate, Pquantity, Cno, INo)
+
+#######################################################################################
+
+1. List all stationary items with price between 400/- to 1000/-
+-->SELECT * FROM ITEMS WHERE Itype = 'Stationary' AND Iprice BETWEEN 400.00 AND 1000.00;
+
+2. Change the mobile number of customer “Gopal”
+-->UPDATE CUSTOMERS SET CMobile = '9998887777' WHERE Cname = 'Gopal';
+
+3. Display the item with maximum price
+-->SELECT * FROM ITEMS WHERE Iprice = (SELECT MAX(Iprice) FROM ITEMS);
+
+4. Display all purchases sorted from the most recent to the oldest
+-->SELECT * FROM PURCHASE ORDER BY Pdate DESC;
+
+5. Count the number of customers in every city
+-->SELECT Ccity, COUNT(*) AS CustomerCount FROM CUSTOMERS GROUP BY Ccity;
+
+6. Display all purchased quantity of Customer Maya
+-->SELECT P.Pquantity, I.Iname
+FROM PURCHASE P
+JOIN ITEMS I ON P.INo = I.INo
+JOIN CUSTOMERS C ON P.Cno = C.CNo
+WHERE C.Cname = 'Maya';
+
+7. Create view which shows Iname, Price and Count of all stationary items in descending order of price.
+-->CREATE VIEW StationaryItemsView AS
+SELECT Iname, Iprice, Icount
+FROM ITEMS
+WHERE Itype = 'Stationary'
+ORDER BY Iprice DESC;
+

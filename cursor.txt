@@ -1,0 +1,23 @@
+DECLARE
+rollno number;
+flag int(2);
+cursor c_roll(rollno number) is select * from oldt where id not in(select id from 
+newt where newt.id=oldt.id) ;
+info newt%rowtype;
+BEGIN
+rollno := &rollno;
+flag :=0;
+open c_roll(rollno);
+loop fetch c_roll into info;
+exit when c_roll%notfound;
+if (info.id=rollno) then insert into newt values(info.id,info.Name);
+flag := 1;
+end if;
+end loop;
+if ( c_roll%rowcount = 0 or flag=0) then 
+dbms_output.put_line('This record already exits in new table.');
+else dbms_output.put_line('Record updated in new table!');
+end if;
+close c_roll;
+END;
+ /

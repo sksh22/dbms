@@ -1,0 +1,30 @@
+
+create table emp(e_no number , e_name  varchar(10), salary number);
+create table tracking(e_no number , salary number);
+
+
+insert into emp values(101,'Anahita',230000);
+insert into emp values(102,'Karan',75000);
+insert into emp values(103,'Preesha',150000);
+insert into emp values(104,'Aashi',60000);
+insert into emp values(105,'Mohit',85000);
+
+select * from tracking;
+
+Create or replace trigger e2 after insert or update or delete on emp
+for each row
+Begin
+if :new.salary<50000 then
+raise_application_error(-20003,'Salary should be greater than 50000 .');
+end if;
+if inserting then
+insert into tracking values(:new.e_no,:new.salary);
+end if;
+if updating then
+insert into tracking values(:old.e_no,:new.salary);
+end if;
+End;
+
+
+insert into emp values(109,'A',500);
+select *from tracking;

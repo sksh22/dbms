@@ -1,0 +1,51 @@
+Account(Acc_no, branch_name,balance)
+Branch(branch_name,branch_city,assets)
+Customer(cust_name,cust_street,cust_city)
+Depositor(cust_name,acc_no)
+Loan(loan_no,branch_name,amount)
+Borrower(cust_name,loan_no)
+
+***Dont set not null for view operations***
+
+###################################################################################################################
+
+1. Create a View1 to display List all customers in alphabetical order who have loan from Pune_Station branch.
+-->create view view1 as select borrower.cust_name from borrower join loan on loan.loan_no=borrower.loan_no where loan.branch_name='Pune_station' order by cust_name;
+
+2. Create View2 on branch table by selecting any two columns and perform insert update delete operations.
+--> CREATE VIEW View2 AS SELECT branch_name, branch_city FROM branch;
+--> operations :
+   INSERT INTO View2 (branch_name, branch_city) VALUES ('New_Branch', 'New_City');
+   UPDATE View2 SET branch_city = 'Updated_City' WHERE branch_name = 'Existing_Branch';
+   DELETE FROM View2 WHERE branch_name = 'Branch_to_Delete';
+
+3. Create View3 on borrower and depositor table by selecting any one column from each table perform insert update delete operations.
+--> CREATE VIEW View3 AS SELECT b.cust_name, d.acc_no FROM borrower b JOIN depositor d ON b.cust_name = d.cust_name;
+-->Perform operations
+   INSERT INTO View3 (cust_name, acc_no) VALUES ('New_Customer', 'New_Account');
+   UPDATE View3 SET acc_no = 'Updated_Account' WHERE cust_name = 'Existing_Customer';
+   DELETE FROM View3 WHERE cust_name = 'Customer_to_Delete';
+
+4. Create Union of left and right joint for all customers who have an account or loan or both at bank
+-->CREATE VIEW UnionView AS
+SELECT c.cust_name, a.acc_no, l.loan_no
+FROM customer c
+LEFT JOIN depositor d ON c.cust_name = d.cust_name
+LEFT JOIN account a ON d.acc_no = a.acc_no
+LEFT JOIN borrower b ON c.cust_name = b.cust_name
+LEFT JOIN loan l ON b.loan_no = l.loan_no
+UNION
+SELECT c.cust_name, a.acc_no, l.loan_no
+FROM customer c
+RIGHT JOIN depositor d ON c.cust_name = d.cust_name
+RIGHT JOIN account a ON d.acc_no = a.acc_no
+RIGHT JOIN borrower b ON c.cust_name = b.cust_name
+RIGHT JOIN loan l ON b.loan_no = l.loan_no;
+
+5. Create Simple and Unique index.
+-->CREATE INDEX idx_branch_name ON branch(branch_name);
+-->CREATE UNIQUE INDEX idx_acc_no ON account(acc_no);
+
+6. Display index Information.
+-->SHOW INDEX FROM Branch;
+   SHOW INDEX FROM Account;

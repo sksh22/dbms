@@ -1,0 +1,141 @@
+1. Using aggregation Return Designation with Total Salary is 
+Above 200000.
+-->db.Employee.aggregate([
+  {
+    $group: {
+      _id: "$Designation",
+      totalSalary: { $sum: "$Salary" }
+    }
+  },
+  {
+    $match: {
+      totalSalary: { $gt: 200000 }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      Designation: "$_id",
+      totalSalary: 1
+    }
+  }
+]);
+
+2. Using Aggregate method returns names and _id in upper case andin alphabetical order.
+-->db.Employee.aggregate([
+  {
+    $project: {
+      _id: 1,
+      Name: {
+        $concat: [
+          { $toUpper: "$Name.FName" },
+          " ",
+          { $toUpper: "$Name.LName" }
+        ]
+      }
+    }
+  },
+  {
+    $sort: { Name: 1 }
+  }
+]);
+
+3. Using aggregation method find Employee with Total Salary for Each City with Designation="DBA".
+-->db.Employee.aggregate([
+  {
+    $match: { Designation: "DBA" }
+  },
+  {
+    $group: {
+      _id: "$Address.city",
+      totalSalary: { $sum: "$Salary" }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      City: "$_id",
+      totalSalary: 1
+    }
+  }
+]);
+
+4. Create Single Field Indexes on Designation field of employee collection
+-->db.Employee.createIndex({ Designation: 1 });
+
+5. To Create Multikey Indexes on Expertise field of employee collection.
+-->db.Employee.createIndex({ Expertise: 1 });
+
+6. Create an Index on Emp_id field, compare the time require to search Emp_id before and after creating an index. (Hint Add atleast 10000 Documents)
+-->before creating index
+var startTime = new Date();
+db.Employee.find({ Emp_id: 1000 });
+var endTime = new Date();
+print("Time taken without index: " + (endTime - startTime) + "ms");
+-->after creating index
+db.Employee.createIndex({ Emp_id: 1 });
+var startTimeWithIndex = new Date();
+db.Employee.find({ Emp_id: 1000 });
+var endTimeWithIndex = new Date();
+print("Time taken with index: " + (endTimeWithIndex - startTimeWithIndex) + "ms");
+
+7. Return a List of Indexes on created on employee Collection.
+-->db.Employee.getIndexes();
+
+
+#######################################################################################
+
+
+1. Using aggregation Return separates value in the Expertise array and return sum of each element of array.
+-->db.Employee.aggregate([
+  { $unwind: "$Expertise" },
+  { $group: { _id: "$Expertise", total: { $sum: 1 } } }
+]);
+
+2. Using Aggregate method return Max and Min Salary for each company.
+-->db.Employee.aggregate([
+  {
+    $group: {
+      _id: "$CompanyName",
+      maxSalary: { $max: "$Salary" },
+      minSalary: { $min: "$Salary" }
+    }
+  }
+]);
+
+3. Using Aggregate method find Employee with Total Salary for Each City with Designation="DBA". 
+-->db.Employee.aggregate([
+  { $match: { Designation: "DBA" } },
+  {
+    $group: {
+      _id: "$Address.city",
+      totalSalary: { $sum: "$Salary" }
+    }
+  }
+]);
+
+4. Using aggregation method Return separates value in the Expertise array for employee name where Swapnil Jadhav
+-->db.Employee.aggregate([
+  { $match: { "Name.FName": "Swapnil", "Name.LName": "Jadhav" } },
+  { $unwind: "$Expertise" },
+  { $group: { _id: "$Name", expertise: { $push: "$Expertise" } } }
+]);
+
+5. To Create Compound Indexes on Name: 1, Age: -1
+-->db.Employee.createIndex({ "Name.FName": 1, "Name.LName": 1, Age: -1 });
+
+6. Create an Index on Emp_id field , compare the time require to search Emp_id before and after creating an index. (Hint Add at least 10000 Documents)
+-->-->before creating index
+var startTime = new Date();
+db.Employee.find({ Emp_id: 1000 });
+var endTime = new Date();
+print("Time taken without index: " + (endTime - startTime) + "ms");
+-->after creating index
+db.Employee.createIndex({ Emp_id: 1 });
+var startTimeWithIndex = new Date();
+db.Employee.find({ Emp_id: 1000 });
+var endTimeWithIndex = new Date();
+print("Time taken with index: " + (endTimeWithIndex - startTimeWithIndex) + "ms");
+
+7. Return a List of Indexes on created on employee Collection.
+-->db.Employee.getIndexes();

@@ -1,0 +1,46 @@
+Employee(emp_id,employee_name,street,city)
+Works(employee_name,company_name,salary)
+Company(company_name,city)
+Manages(employee_name,manager_name)
+
+###############################################################################################
+
+1. Find the names of all employees who work for „TCS‟.
+-->select employee_name from works where company_name='TCS';
+
+2. Find the names and company names of all employees sorted in ascending order of company name and descending order of employee names of that company.
+-->SELECT employee_name, company_name FROM works ORDER BY company_name ASC, employee_name DESC;
+
+3. Change the city of employee working with InfoSys to "Bangalore‟
+-->UPDATE company SET city = 'Bangalore' WHERE company_name = 'InfoSys';
+
+4. Find the names, street address, and cities of residence for all employees who work for 'TechM' and earn more than $10,000.
+-->SELECT employee_name, street, city FROM employee WHERE company_name = 'TechM' AND salary > 10000;
+
+5. Add Column Asset to Company table.
+-->ALTER TABLE Company
+ADD COLUMN Asset varchar(20);
+
+
+#########################################################################################
+
+1. Change the city of employee working with InfoSys to „Bangalore‟
+-->UPDATE company SET city = 'Bangalore' WHERE company_name = 'InfoSys';
+
+2. Find the names of all employees who earn more than the average salary of all employees of their company. Assume that all people work for at most one company.
+-->SELECT employee_name FROM works e WHERE salary > (SELECT AVG(salary) FROM works WHERE company_name = e.company_name);
+
+3. Find the names, street address, and cities of residence for  all employees who work for 'TechM' and earn more than $10,000.
+-->SELECT employee_name, street, city FROM employee WHERE company_name = 'TechM' AND salary > 10000;
+
+4. Change name of table Manages to Management.
+-->ALTER TABLE Manages RENAME TO Management;
+
+5. Create Simple and Unique index on employee table.
+-->Simple Index
+CREATE INDEX idx_employee_name ON employee(employee_name);
+-->Unique Index
+CREATE UNIQUE INDEX idx_employee_id ON employee(employee_id);
+
+6. Display index Information 
+-->SHOW INDEX FROM employee;
